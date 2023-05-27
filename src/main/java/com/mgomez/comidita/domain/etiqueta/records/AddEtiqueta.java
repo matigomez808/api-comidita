@@ -1,8 +1,8 @@
-package com.mgomez.comidita.domain.tag;
+package com.mgomez.comidita.domain.etiqueta.records;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record DatosAddEtiqueta(
+public record AddEtiqueta(
         @NotBlank
         String nombre
 ) {

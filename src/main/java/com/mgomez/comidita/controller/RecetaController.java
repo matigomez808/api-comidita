@@ -1,8 +1,12 @@
 package com.mgomez.comidita.controller;
 
+import com.mgomez.comidita.domain.ingrediente.Ingrediente;
 import com.mgomez.comidita.domain.receta.*;
-import com.mgomez.comidita.domain.receta.DatosAddReceta;
-import com.mgomez.comidita.domain.tag.EtiquetaRepository;
+import com.mgomez.comidita.domain.receta.records.AddReceta;
+import com.mgomez.comidita.domain.etiqueta.EtiquetaRepository;
+import com.mgomez.comidita.domain.receta.records.EtiquetarReceta;
+import com.mgomez.comidita.domain.receta.records.ListarReceta;
+import com.mgomez.comidita.domain.receta.records.DatosReceta;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +25,9 @@ public class RecetaController {
     @Autowired
     private EtiquetaRepository tagRepository;
 
-    @PostMapping
-    public ResponseEntity agregarReceta(
-            @RequestBody @Valid
-            DatosAddReceta datosAddReceta) {
-        Receta receta = recetaRepository.save(new Receta(datosAddReceta));
-        return ResponseEntity.ok(receta.toString());
-    }
-
-    @PostMapping("/etiquetar")
-    @Transactional
-    public void etiquetarReceta(
-            @RequestBody @Valid
-            DatosEtiquetarReceta datosEtiquetarReceta) {
-        Receta receta = recetaRepository.getReferenceById(datosEtiquetarReceta.idReceta());
-        receta.etiquetar(datosEtiquetarReceta.listaEtiquetas());
-        recetaRepository.saveAndFlush(receta);
-
-
-    }
-
     @GetMapping
-    public ResponseEntity<Page<DatosListarReceta>> listarRecetas(@PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(recetaRepository.findAll(pageable).map(DatosListarReceta::new));
+    public ResponseEntity<Page<ListarReceta>> listarRecetas(@PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(recetaRepository.findByActivoTrue(pageable).map(ListarReceta::new));
     }
 
     @GetMapping("/{id}")
@@ -53,5 +37,29 @@ public class RecetaController {
         return ResponseEntity.ok(datosReceta);
     }
 
+    @PostMapping("/agregar")
+    public ResponseEntity agregarReceta(@RequestBody @Valid AddReceta datosAddReceta) {
+        Receta receta = recetaRepository.save(new Receta(datosAddReceta));
+        return ResponseEntity.ok(receta.toString());
+    }
 
+    @PostMapping("/etiquetar")
+    @Transactional
+    public void etiquetarReceta(@RequestBody @Valid EtiquetarReceta datosEtiquetarReceta) {
+        Receta receta = recetaRepository.getReferenceById(datosEtiquetarReceta.idReceta());
+        receta.etiquetar(datosEtiquetarReceta.listaEtiquetas());
+        recetaRepository.saveAndFlush(receta);
+
+
+    }
+
+    @PostMapping("/eliminar")
+    @Transactional
+    public ResponseEntity eliminarReceta(@RequestBody @Valid Long id) {
+        Receta receta = recetaRepository.getReferenceById(id);
+        receta.desactivar();
+        recetaRepository.saveAndFlush(receta);
+        return ResponseEntity.noContent().build();
+
+    }
 }

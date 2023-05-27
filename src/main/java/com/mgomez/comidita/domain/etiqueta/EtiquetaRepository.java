@@ -1,4 +1,4 @@
-package com.mgomez.comidita.domain.tag;
+package com.mgomez.comidita.domain.etiqueta;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,9 @@
 package com.mgomez.comidita.controller;
 
-import com.mgomez.comidita.domain.tag.DatosAddEtiqueta;
-import com.mgomez.comidita.domain.tag.DatosEtiqueta;
-import com.mgomez.comidita.domain.tag.Etiqueta;
-import com.mgomez.comidita.domain.tag.EtiquetaRepository;
+import com.mgomez.comidita.domain.etiqueta.records.AddEtiqueta;
+import com.mgomez.comidita.domain.etiqueta.records.DatosEtiqueta;
+import com.mgomez.comidita.domain.etiqueta.Etiqueta;
+import com.mgomez.comidita.domain.etiqueta.EtiquetaRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,16 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping ("/tags")
+@RequestMapping ("/etiquetas")
 public class EtiquetaController {
 
     @Autowired
     private EtiquetaRepository tagRepository;
 
     @PostMapping
-    public ResponseEntity agregarTag(
-            @RequestBody @Valid
-            DatosAddEtiqueta datosAddTag) {
+    public ResponseEntity agregarTag(@RequestBody @Valid AddEtiqueta datosAddTag) {
         Etiqueta tag = tagRepository.save(new Etiqueta(datosAddTag));
         System.out.println(tag.getId() + tag.getNombre());
         return ResponseEntity.ok().build();
@@ -33,10 +31,8 @@ public class EtiquetaController {
         return ResponseEntity.ok(tagRepository.findAll(pageable).map(DatosEtiqueta::new));
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<DatosListadoMedico>> listadoMedicos(@PageableDefault(size = 2) Pageable paginacion) {
-//        //return medicoRepository.findAll(paginacion).map(DatosListadoMedico::new);
-//        return ResponseEntity.ok(medicoRepository.findByActivoTrue(paginacion).map(DatosListadoMedico::new));
-//    }
+    // Modificar tag
+
+    // Eliminar tag
 
 }

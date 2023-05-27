@@ -1,5 +1,6 @@
-package com.mgomez.comidita.domain.tag;
+package com.mgomez.comidita.domain.etiqueta;
 
+import com.mgomez.comidita.domain.etiqueta.records.AddEtiqueta;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Etiqueta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -19,7 +19,7 @@ public class Etiqueta {
     @Column(name = "nombre")
     private String nombre;
 
-    public Etiqueta(DatosAddEtiqueta datosAddTag) {
+    public Etiqueta(AddEtiqueta datosAddTag) {
         this.nombre = datosAddTag.nombre();
     }
 

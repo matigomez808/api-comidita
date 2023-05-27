@@ -1,7 +1,8 @@
 package com.mgomez.comidita.domain.receta;
 
-import com.mgomez.comidita.domain.tag.Etiqueta;
+import com.mgomez.comidita.domain.etiqueta.Etiqueta;
 import com.mgomez.comidita.domain.ingrediente.Ingrediente;
+import com.mgomez.comidita.domain.receta.records.AddReceta;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -44,8 +45,10 @@ public class Receta {
             inverseJoinColumns = @JoinColumn (name = "etiqueta_id")
     )
     private List<Etiqueta> listaEtiquetas = new ArrayList<>();
+    @Column(name = "activo")
+    private boolean activo;
 
-    public Receta(DatosAddReceta datosAddReceta) {
+    public Receta(AddReceta datosAddReceta) {
         this.nombre = datosAddReceta.nombre();
         this.descripcion =datosAddReceta.descripcion();
         this.instrucciones = datosAddReceta.instrucciones();
@@ -62,5 +65,9 @@ public class Receta {
             }
         }
 
+    }
+
+    public void desactivar() {
+        this.activo = false;
     }
 }
