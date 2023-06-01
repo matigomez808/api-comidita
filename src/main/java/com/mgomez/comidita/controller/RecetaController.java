@@ -25,8 +25,7 @@ public class RecetaController {
     private RecetaRepository recetaRepository;
     @Autowired
     private EtiquetaRepository tagRepository;
-    @Autowired
-    private IngredienteRecetaRepository ingredienteRecetaRepository;
+
 
     @GetMapping
     public ResponseEntity<Page<ListarReceta>> listarRecetas(@PageableDefault(size = 10) Pageable pageable) {
@@ -42,7 +41,6 @@ public class RecetaController {
 
     @PostMapping("/agregar")
     public ResponseEntity agregarReceta(@RequestBody @Valid AddReceta addReceta) {
-
         Receta receta = recetaRepository.save(new Receta(addReceta));
         return ResponseEntity.ok(new DatosReceta(receta));
     }

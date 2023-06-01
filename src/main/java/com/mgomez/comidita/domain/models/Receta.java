@@ -49,7 +49,9 @@ public class Receta {
         this.nombre = datosAddReceta.nombre();
         this.descripcion = datosAddReceta.descripcion();
         this.instrucciones = datosAddReceta.instrucciones();
-        this.listaIngredientes = datosAddReceta.listaIngredientesConCantidad();
+        var listaIngredientesConCantidad = datosAddReceta.listaIngredientesConCantidad();
+
+        this.listaIngredientes = listaIngredientesConCantidad;
         if (datosAddReceta.listaEtiquetas() != null)
             this.listaEtiquetasReceta = datosAddReceta.listaEtiquetas();
     }

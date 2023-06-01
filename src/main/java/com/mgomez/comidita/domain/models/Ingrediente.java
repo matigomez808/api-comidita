@@ -25,8 +25,8 @@ public class Ingrediente {
 
     @Column
     private String descripcion;
-
-    @ManyToMany
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "ingrediente_etiqueta",
             joinColumns = @JoinColumn(name = "ingrediente_id"),
@@ -47,15 +47,15 @@ public class Ingrediente {
     public Ingrediente(AddIngrediente datosAddIngrediente) {
         this.descripcion = datosAddIngrediente.descripcion();
         this.nombre = datosAddIngrediente.nombre();
+        this.gondola = datosAddIngrediente.gondola();
+        if (datosAddIngrediente.listaEtiquetas() != null){
+            this.listaEtiquetasIngrediente = datosAddIngrediente.listaEtiquetas();
+        }
     }
-
 
     public Ingrediente(Long id) {
         this.id = id;
     }
-
-
-
 
     public void etiquetar(List<Etiqueta> etiquetas) {
         for (Etiqueta etiquetaNueva : etiquetas) {

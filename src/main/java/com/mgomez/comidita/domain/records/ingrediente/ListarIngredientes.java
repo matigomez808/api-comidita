@@ -9,6 +9,7 @@ public record ListarIngredientes(Long id,
                                  String nombre,
                                  String descripcion,
                                  List<Etiqueta> listaEtiquetas
+
 ) {
     public ListarIngredientes(Ingrediente ingrediente){
         this(ingrediente.getId(), ingrediente.getNombre(), ingrediente.getDescripcion(), ingrediente.getListaEtiquetasIngrediente());
