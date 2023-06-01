@@ -1,9 +1,9 @@
 package com.mgomez.comidita.controller;
 
-import com.mgomez.comidita.domain.etiqueta.records.AddEtiqueta;
-import com.mgomez.comidita.domain.etiqueta.records.DatosEtiqueta;
-import com.mgomez.comidita.domain.etiqueta.Etiqueta;
-import com.mgomez.comidita.domain.etiqueta.EtiquetaRepository;
+import com.mgomez.comidita.domain.records.etiqueta.AddEtiqueta;
+import com.mgomez.comidita.domain.records.etiqueta.DatosEtiqueta;
+import com.mgomez.comidita.domain.models.Etiqueta;
+import com.mgomez.comidita.domain.repos.EtiquetaRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

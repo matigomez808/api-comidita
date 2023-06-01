@@ -1,12 +1,13 @@
 package com.mgomez.comidita.controller;
 
-import com.mgomez.comidita.domain.ingrediente.Ingrediente;
-import com.mgomez.comidita.domain.receta.*;
-import com.mgomez.comidita.domain.receta.records.AddReceta;
-import com.mgomez.comidita.domain.etiqueta.EtiquetaRepository;
-import com.mgomez.comidita.domain.receta.records.EtiquetarReceta;
-import com.mgomez.comidita.domain.receta.records.ListarReceta;
-import com.mgomez.comidita.domain.receta.records.DatosReceta;
+import com.mgomez.comidita.domain.models.Receta;
+import com.mgomez.comidita.domain.records.receta.AddReceta;
+import com.mgomez.comidita.domain.repos.EtiquetaRepository;
+import com.mgomez.comidita.domain.records.receta.EtiquetarReceta;
+import com.mgomez.comidita.domain.records.receta.ListarReceta;
+import com.mgomez.comidita.domain.records.receta.DatosReceta;
+import com.mgomez.comidita.domain.repos.RecetaRepository;
+import com.mgomez.comidita.domain.repos.IngredienteRecetaRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class RecetaController {
     private RecetaRepository recetaRepository;
     @Autowired
     private EtiquetaRepository tagRepository;
+    @Autowired
+    private IngredienteRecetaRepository ingredienteRecetaRepository;
 
     @GetMapping
     public ResponseEntity<Page<ListarReceta>> listarRecetas(@PageableDefault(size = 10) Pageable pageable) {
@@ -38,9 +41,10 @@ public class RecetaController {
     }
 
     @PostMapping("/agregar")
-    public ResponseEntity agregarReceta(@RequestBody @Valid AddReceta datosAddReceta) {
-        Receta receta = recetaRepository.save(new Receta(datosAddReceta));
-        return ResponseEntity.ok(receta.toString());
+    public ResponseEntity agregarReceta(@RequestBody @Valid AddReceta addReceta) {
+
+        Receta receta = recetaRepository.save(new Receta(addReceta));
+        return ResponseEntity.ok(new DatosReceta(receta));
     }
 
     @PostMapping("/etiquetar")

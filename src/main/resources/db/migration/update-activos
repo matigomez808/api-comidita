@@ -1,0 +1,9 @@
+
+
+ALTER TABLE recetas
+ADD activo BIT DEFAULT 1;
+
+
+
+UPDATE ingredientes SET activo=1;
+UPDATE recetas SET activo=1;

@@ -1,11 +1,12 @@
 package com.mgomez.comidita.controller;
 
-import com.mgomez.comidita.domain.ingrediente.*;
-import com.mgomez.comidita.domain.ingrediente.records.AddIngrediente;
-import com.mgomez.comidita.domain.ingrediente.records.EtiquetarIngrediente;
-import com.mgomez.comidita.domain.ingrediente.records.DatosIngrediente;
-import com.mgomez.comidita.domain.ingrediente.records.RegistroIngrediente;
-import com.mgomez.comidita.domain.etiqueta.EtiquetaRepository;
+import com.mgomez.comidita.domain.records.ingrediente.AddIngrediente;
+import com.mgomez.comidita.domain.records.ingrediente.EtiquetarIngrediente;
+import com.mgomez.comidita.domain.records.ingrediente.RespuestaIngrediente;
+import com.mgomez.comidita.domain.repos.EtiquetaRepository;
+import com.mgomez.comidita.domain.records.ingrediente.ListarIngredientes;
+import com.mgomez.comidita.domain.models.Ingrediente;
+import com.mgomez.comidita.domain.repos.IngredienteRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Optional;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/ingrediente")
@@ -27,21 +29,31 @@ public class IngredienteController {
     private EtiquetaRepository tagRepository;
 
     @GetMapping
-    public ResponseEntity<Page<RegistroIngrediente>> listarIngredientes(@PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(ingredienteRepository.findByActivoTrue(pageable).map(RegistroIngrediente::new));
+    public ResponseEntity<Page<ListarIngredientes>> listarIngredientes(@PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(ingredienteRepository.findByActivoTrue(pageable).map(ListarIngredientes::new));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DatosIngrediente> mostrarIngredientePorID(@PathVariable Long id) {
+    public ResponseEntity<RespuestaIngrediente> mostrarIngredientePorID(@PathVariable Long id) {
         Ingrediente ingrediente = ingredienteRepository.getReferenceById(id);
-        DatosIngrediente datosIngrediente = new DatosIngrediente(ingrediente);
-        return ResponseEntity.ok(datosIngrediente);
+        var respuestaIngrediente = new RespuestaIngrediente(
+                ingrediente.getId(),
+                ingrediente.getNombre(),
+                ingrediente.getDescripcion(),
+                ingrediente.getGondola().toString());
+        return ResponseEntity.ok(respuestaIngrediente);
     }
 
     @PostMapping
-    public ResponseEntity agregarIngediente(@RequestBody @Valid AddIngrediente datosIngrediente) {
+    public ResponseEntity agregarIngediente(@RequestBody @Valid AddIngrediente datosIngrediente, UriComponentsBuilder uriComponentsBuilder) {
         Ingrediente ingrediente = ingredienteRepository.save(new Ingrediente(datosIngrediente));
-        return ResponseEntity.ok(ingrediente.toString());
+        RespuestaIngrediente respuestaIngrediente = new RespuestaIngrediente(
+                ingrediente.getId(),
+                ingrediente.getNombre(),
+                ingrediente.getDescripcion(),
+                ingrediente.getGondola().toString());
+        URI url = uriComponentsBuilder.path("/ingrediente/{id}").buildAndExpand(ingrediente.getId()).toUri();
+        return ResponseEntity.created(url).body(respuestaIngrediente);
     }
 
     @PostMapping("/etiquetar")

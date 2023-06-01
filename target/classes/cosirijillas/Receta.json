@@ -1,0 +1,20 @@
+{
+  "id": "",
+  "nombre": "",
+  "descripcion": "",
+  "listaEtiquetas": [],
+  "instrucciones": "",
+  "listaIngredientes": [
+    {
+      "id": "",
+      "cantidad": "",
+      "unidad": ""
+    },
+    {
+      "id": "",
+      "cantidad": "",
+      "unidad": ""
+    }
+  ],
+  "activo": ""
+}
