@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "recetas")
 @Entity(name = "receta")
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,9 +50,6 @@ public class Receta {
         this.nombre = datosAddReceta.nombre();
         this.descripcion = datosAddReceta.descripcion();
         this.instrucciones = datosAddReceta.instrucciones();
-        var listaIngredientesConCantidad = datosAddReceta.listaIngredientesConCantidad();
-
-        this.listaIngredientes = listaIngredientesConCantidad;
         if (datosAddReceta.listaEtiquetas() != null)
             this.listaEtiquetasReceta = datosAddReceta.listaEtiquetas();
     }

@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "etiquetas")
 @Entity(name = "etiqueta")
 @Getter
-@ToString
+
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -22,9 +22,11 @@ public class Etiqueta {
 
     @Column(unique=true)
     private String nombre;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "listaEtiquetasReceta")
     private List<Receta> recetas;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "listaEtiquetasIngrediente")
     private List<Ingrediente> ingredientes;

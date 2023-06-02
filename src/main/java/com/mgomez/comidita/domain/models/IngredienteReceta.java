@@ -1,5 +1,6 @@
 package com.mgomez.comidita.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mgomez.comidita.domain.records.ingrediente.Unidad;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,6 +8,7 @@ import lombok.*;
 @Table(name = "ingredientes_receta")
 @Entity(name = "ingrediente_receta")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -16,10 +18,12 @@ public class IngredienteReceta {
     @Column
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receta_id")
     private Receta receta;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingrediente_id")
     private Ingrediente ingrediente;
@@ -31,8 +35,15 @@ public class IngredienteReceta {
     @Column
     Unidad unidad;
 
-    public IngredienteReceta(Long ingrediente_id, Unidad unidad, Integer cantidad){
-        this.id = ingrediente_id;
+    private String nombre;
+//    public IngredienteReceta(Ingrediente ingrediente, Receta receta , Unidad unidad, Integer cantidad){
+//        this.ingrediente = ingrediente;
+//        this.receta = receta;
+//        this.cantidad = cantidad;
+//        this.unidad = unidad;
+
+    public IngredienteReceta(Long id, Unidad unidad, Integer cantidad){
+        this.id = id;
         this.cantidad = cantidad;
         this.unidad = unidad;
     }

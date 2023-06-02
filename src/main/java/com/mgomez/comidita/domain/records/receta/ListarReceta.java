@@ -9,11 +9,10 @@ import java.util.List;
 public record ListarReceta(
         Long id,
         String nombre,
-        String descripcion,
-        List<IngredienteReceta> listaIngredientes
+        String descripcion
 
 ) {
     public ListarReceta(Receta receta) {
-        this(receta.getId(), receta.getNombre(), receta.getDescripcion(), receta.getListaIngredientes());
+        this(receta.getId(), receta.getNombre(), receta.getDescripcion());
     }
 }
