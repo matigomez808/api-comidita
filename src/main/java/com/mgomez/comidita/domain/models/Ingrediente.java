@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "ingredientes")
 @Entity(name = "ingrediente")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -66,4 +67,6 @@ public class Ingrediente {
     public void desactivar() {
         this.activo = false;
     }
+
+
 }

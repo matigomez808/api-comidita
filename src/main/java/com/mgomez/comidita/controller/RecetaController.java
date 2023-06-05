@@ -3,15 +3,14 @@ package com.mgomez.comidita.controller;
 import com.mgomez.comidita.domain.models.Ingrediente;
 import com.mgomez.comidita.domain.models.IngredienteReceta;
 import com.mgomez.comidita.domain.models.Receta;
-import com.mgomez.comidita.domain.records.ingredienteReceta.RecetaIngredienteDTO;
 import com.mgomez.comidita.domain.records.receta.AddReceta;
-import com.mgomez.comidita.domain.repos.EtiquetaRepository;
+import com.mgomez.comidita.domain.records.receta.DatosReceta;
 import com.mgomez.comidita.domain.records.receta.EtiquetarReceta;
 import com.mgomez.comidita.domain.records.receta.ListarReceta;
-import com.mgomez.comidita.domain.records.receta.DatosReceta;
+import com.mgomez.comidita.domain.repos.EtiquetaRepository;
+import com.mgomez.comidita.domain.repos.IngredienteRecetaRepository;
 import com.mgomez.comidita.domain.repos.IngredienteRepository;
 import com.mgomez.comidita.domain.repos.RecetaRepository;
-import com.mgomez.comidita.domain.repos.IngredienteRecetaRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,36 +71,6 @@ public class RecetaController {
 
         return ResponseEntity.ok(new DatosReceta(receta));
     }
-
-//
-//    @PostMapping("/agregar")
-//    public ResponseEntity agregarReceta(@RequestBody @Valid AddReceta addReceta) {
-//        Receta receta = new Receta(addReceta);
-//
-//        // Create IngredienteReceta instances and associate them with the Receta
-//        List<IngredienteReceta> ingredientesReceta = new ArrayList<>();
-//        for (IngredienteRecetaDTO ingredienteRecetaDTO : addReceta.getIngredientes()) {
-//            Ingrediente ingrediente = ingredienteRepository.findById(ingredienteRecetaDTO.getIngredienteId())
-//                    .orElseThrow(() -> new EntityNotFoundException("Ingrediente not found with ID: " + ingredienteRecetaDTO.getIngredienteId()));
-//
-//            IngredienteReceta ingredienteReceta = new IngredienteReceta();
-//            ingredienteReceta.setReceta(receta);
-//            ingredienteReceta.setIngrediente(ingrediente);
-//            ingredienteReceta.setCantidad(ingredienteRecetaDTO.getCantidad());
-//            ingredienteReceta.setUnidad(ingredienteRecetaDTO.getUnidad());
-//            ingredientesReceta.add(ingredienteReceta);
-//        }
-//
-//        receta.setListaIngredientes(ingredientesReceta);
-//
-//        // Save the Receta entity
-//        receta = recetaRepository.save(receta);
-//
-//        return ResponseEntity.ok(new DatosReceta(receta));
-//    }
-
-
-
 
     @PostMapping("/etiquetar")
     @Transactional

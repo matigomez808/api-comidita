@@ -7,6 +7,8 @@ import com.mgomez.comidita.domain.repos.EtiquetaRepository;
 import com.mgomez.comidita.domain.records.ingrediente.ListarIngredientes;
 import com.mgomez.comidita.domain.models.Ingrediente;
 import com.mgomez.comidita.domain.repos.IngredienteRepository;
+import com.mgomez.comidita.servicios.IngredienteServicio;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class IngredienteController {
     private IngredienteRepository ingredienteRepository;
     @Autowired
     private EtiquetaRepository tagRepository;
+    @Autowired
+    IngredienteServicio ingredienteServicio;
 
     @GetMapping
     public ResponseEntity<Page<ListarIngredientes>> listarIngredientes(@PageableDefault(size = 10) Pageable pageable) {
@@ -35,48 +39,36 @@ public class IngredienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RespuestaIngrediente> mostrarIngredientePorID(@PathVariable Long id) {
-        Ingrediente ingrediente = ingredienteRepository.getReferenceById(id);
-        var respuestaIngrediente = new RespuestaIngrediente(
-                ingrediente.getId(),
-                ingrediente.getNombre(),
-                ingrediente.getDescripcion(),
-                ingrediente.getGondola().toString());
-        return ResponseEntity.ok(respuestaIngrediente);
+        Ingrediente ingrediente = ingredienteServicio.findByID(id);
+        return ResponseEntity.ok(armarRespuestaIngrediente(ingrediente));
     }
 
     @PostMapping
-    public ResponseEntity agregarIngediente(@RequestBody @Valid AddIngrediente datosIngrediente, UriComponentsBuilder uriComponentsBuilder) {
-        Ingrediente ingrediente = ingredienteRepository.save(new Ingrediente(datosIngrediente));
-        RespuestaIngrediente respuestaIngrediente = new RespuestaIngrediente(
-                ingrediente.getId(),
-                ingrediente.getNombre(),
-                ingrediente.getDescripcion(),
-                ingrediente.getGondola().toString());
+    public ResponseEntity agregarIngediente(@RequestBody @Valid AddIngrediente addIngrediente, UriComponentsBuilder uriComponentsBuilder) {
+        Ingrediente ingrediente = ingredienteServicio.guardarIngredienteNuevo(addIngrediente);
         URI url = uriComponentsBuilder.path("/ingrediente/{id}").buildAndExpand(ingrediente.getId()).toUri();
-        return ResponseEntity.created(url).body(respuestaIngrediente);
+        return ResponseEntity.created(url).body(armarRespuestaIngrediente(ingrediente));
     }
 
     @PostMapping("/etiquetar")
     @Transactional
-    public ResponseEntity etiquetarIngrediente(@RequestBody @Valid EtiquetarIngrediente datosTagIngrediente) {
-        Ingrediente ingrediente = ingredienteRepository.getReferenceById(datosTagIngrediente.idIngrediente());
-        ingrediente.etiquetar(datosTagIngrediente.etiquetas());
-        System.out.println(ingrediente.getNombre());
-        ingredienteRepository.saveAndFlush(ingrediente);
+    public ResponseEntity etiquetarIngrediente(@RequestBody @Valid EtiquetarIngrediente etiquetasIngrediente) {
+        Ingrediente ingrediente = ingredienteServicio.findByID(etiquetasIngrediente.idIngrediente());
+        ingrediente = ingredienteServicio.etiquetarIngrediente(etiquetasIngrediente);
         return ResponseEntity.ok("Etiquetado con éxito");
-
-
     }
 
     @PostMapping("/eliminar")
     @Transactional
     public ResponseEntity eliminarIngrediente(@RequestBody @Valid Long id) {
-        Ingrediente ingrediente = ingredienteRepository.getReferenceById(id);
-        ingrediente.desactivar();
-        ingredienteRepository.saveAndFlush(ingrediente);
+        ingredienteServicio.eliminarActivo(id);
         return ResponseEntity.noContent().build();
     }
 
-
+    public RespuestaIngrediente armarRespuestaIngrediente(Ingrediente i) {
+        RespuestaIngrediente rta = new RespuestaIngrediente(
+                i.getId(), i.getNombre(), i.getDescripcion(), i.getGondola().toString());
+        return rta;
+    }
 
 }
