@@ -12,7 +12,7 @@ public record DatosReceta(
         String descripcion,
         String instrucciones,
         List<IngredienteReceta> listaIngredientes,
-        List<Etiqueta> listaEtiquetas,
+        List<Etiqueta> listaEtiquetasReceta,
         boolean activo
 ) {
     public DatosReceta(Receta receta) {

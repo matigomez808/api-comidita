@@ -8,7 +8,6 @@ import com.mgomez.comidita.domain.records.ingrediente.ListarIngredientes;
 import com.mgomez.comidita.domain.models.Ingrediente;
 import com.mgomez.comidita.domain.repos.IngredienteRepository;
 import com.mgomez.comidita.servicios.IngredienteServicio;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +19,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ingrediente")
 public class IngredienteController {
 
     @Autowired
-    private IngredienteRepository ingredienteRepository;
-    @Autowired
-    private EtiquetaRepository tagRepository;
-    @Autowired
     IngredienteServicio ingredienteServicio;
 
     @GetMapping
-    public ResponseEntity<Page<ListarIngredientes>> listarIngredientes(@PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(ingredienteRepository.findByActivoTrue(pageable).map(ListarIngredientes::new));
+    public List<Ingrediente> listarIngredientes() {
+        return ingredienteServicio.listarIngredientes();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RespuestaIngrediente> mostrarIngredientePorID(@PathVariable Long id) {
-        Ingrediente ingrediente = ingredienteServicio.findByID(id);
+        Ingrediente ingrediente = ingredienteServicio.encontrarPorId(id);
         return ResponseEntity.ok(armarRespuestaIngrediente(ingrediente));
     }
 
@@ -53,7 +49,7 @@ public class IngredienteController {
     @PostMapping("/etiquetar")
     @Transactional
     public ResponseEntity etiquetarIngrediente(@RequestBody @Valid EtiquetarIngrediente etiquetasIngrediente) {
-        Ingrediente ingrediente = ingredienteServicio.findByID(etiquetasIngrediente.idIngrediente());
+        Ingrediente ingrediente = ingredienteServicio.encontrarPorId(etiquetasIngrediente.idIngrediente());
         ingrediente = ingredienteServicio.etiquetarIngrediente(etiquetasIngrediente);
         return ResponseEntity.ok("Etiquetado con éxito");
     }

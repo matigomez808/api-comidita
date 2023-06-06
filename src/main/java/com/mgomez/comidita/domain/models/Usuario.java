@@ -25,6 +25,7 @@ public class Usuario implements UserDetails {
     private Long id;
     private String login;
     private String password;
+    private String email;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,4 +61,11 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Usuario(String login, String pass, String email) {
+        this.login = login;
+        this.password = pass;
+        this.email = email;
+    }
+
 }

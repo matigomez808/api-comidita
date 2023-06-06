@@ -6,6 +6,6 @@ import java.util.List;
 
 public record EtiquetarReceta(
         Long idReceta,
-        List<Etiqueta> listaEtiquetas
+        List<Etiqueta> etiquetas
 ) {
 }

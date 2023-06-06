@@ -46,12 +46,12 @@ public class Receta {
     @Column
     private boolean activo = true;
 
-    public Receta(AddReceta datosAddReceta) {
-        this.nombre = datosAddReceta.nombre();
-        this.descripcion = datosAddReceta.descripcion();
-        this.instrucciones = datosAddReceta.instrucciones();
-        if (datosAddReceta.listaEtiquetas() != null)
-            this.listaEtiquetasReceta = datosAddReceta.listaEtiquetas();
+    public Receta(AddReceta data) {
+        this.nombre = data.nombre();
+        this.descripcion = data.descripcion();
+        this.instrucciones = data.instrucciones();
+        if (data.listaEtiquetas() != null)
+            this.listaEtiquetasReceta = data.listaEtiquetas();
     }
 
     public void etiquetar(List<Etiqueta> etiquetas) {

@@ -29,24 +29,26 @@ public class IngredienteReceta {
     private Ingrediente ingrediente;
 
     @Column
-    private Integer cantidad;
+    private Long cantidad;
 
     @Enumerated(EnumType.STRING)
     @Column
     Unidad unidad;
 
     private String nombre;
-//    public IngredienteReceta(Ingrediente ingrediente, Receta receta , Unidad unidad, Integer cantidad){
-//        this.ingrediente = ingrediente;
-//        this.receta = receta;
-//        this.cantidad = cantidad;
-//        this.unidad = unidad;
 
-    public IngredienteReceta(Long id, Unidad unidad, Integer cantidad){
-        this.id = id;
+    public IngredienteReceta(Ingrediente ingrediente, Receta receta , Unidad unidad, Long cantidad) {
+        this.ingrediente = ingrediente;
+        this.receta = receta;
         this.cantidad = cantidad;
         this.unidad = unidad;
     }
+
+//    public IngredienteReceta(Long id, Unidad unidad, Integer cantidad){
+//        this.id = id;
+//        this.cantidad = cantidad;
+//        this.unidad = unidad;
+//    }
 
 
 }

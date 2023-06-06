@@ -4,6 +4,7 @@ import com.mgomez.comidita.domain.records.etiqueta.AddEtiqueta;
 import com.mgomez.comidita.domain.records.etiqueta.DatosEtiqueta;
 import com.mgomez.comidita.domain.models.Etiqueta;
 import com.mgomez.comidita.domain.repos.EtiquetaRepository;
+import com.mgomez.comidita.servicios.EtiquetaServicio;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,23 +13,24 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping ("/etiquetas")
 public class EtiquetaController {
 
     @Autowired
-    private EtiquetaRepository tagRepository;
+    private EtiquetaServicio etiquetaServicio;
 
     @PostMapping
-    public ResponseEntity agregarTag(@RequestBody @Valid AddEtiqueta datosAddTag) {
-        Etiqueta tag = tagRepository.save(new Etiqueta(datosAddTag));
-        System.out.println(tag.getId() + tag.getNombre());
+    public ResponseEntity agregarTag(@RequestBody @Valid AddEtiqueta data) {
+        etiquetaServicio.guardarEtiquetaNueva(data);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<DatosEtiqueta>> listarTags(@PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(tagRepository.findAll(pageable).map(DatosEtiqueta::new));
+    public List<Etiqueta> listarTags(@PageableDefault(size = 10) Pageable pageable) {
+        return etiquetaServicio.listarEtiquetasActivas();
     }
 
     // Modificar tag

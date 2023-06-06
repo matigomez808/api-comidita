@@ -1,6 +1,7 @@
 package com.mgomez.comidita.infra.security;
 
 import com.mgomez.comidita.domain.repos.UsuarioRepository;
+import com.mgomez.comidita.servicios.UsuarioServicio;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioServicio usuarioServicio;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -35,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var token = authHeader.replace("Bearer ", "");
             var username = tokenService.getSubject(token); // extract username
             if (username != null) {
-                var usuario = usuarioRepository.findByLogin(username);
+                var usuario = usuarioServicio.loadUserByUsername(username);
                 var authentication = new UsernamePasswordAuthenticationToken(
                         usuario, null, usuario.getAuthorities()); // Forzamos inciio de sesion
                 SecurityContextHolder.getContext().setAuthentication(authentication);

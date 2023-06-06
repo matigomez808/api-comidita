@@ -2,6 +2,7 @@ package com.mgomez.comidita.domain.records.receta;
 
 import com.mgomez.comidita.domain.models.IngredienteReceta;
 import com.mgomez.comidita.domain.models.Etiqueta;
+import com.mgomez.comidita.domain.records.ingrediente.IngredienteConCantidad;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,7 +16,7 @@ public record AddReceta(
         @NotBlank
         String instrucciones,
         @NotNull
-        List<IngredienteReceta> listaIngredientesConCantidad,
+        List<IngredienteConCantidad> listaIngredientesConCantidad,
         List<Etiqueta> listaEtiquetas
 
 ) {

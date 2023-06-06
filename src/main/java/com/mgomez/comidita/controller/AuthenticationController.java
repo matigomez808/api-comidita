@@ -2,9 +2,11 @@ package com.mgomez.comidita.controller;
 
 import com.mgomez.comidita.domain.models.Usuario;
 import com.mgomez.comidita.domain.records.usuario.DatosAutenticarUsuario;
-import com.mgomez.comidita.domain.repos.UsuarioRepository;
+import com.mgomez.comidita.domain.records.usuario.RegistrarUsuario;
 import com.mgomez.comidita.infra.security.TokenService;
 import com.mgomez.comidita.infra.security.records.DatosJWTToken;
+import com.mgomez.comidita.servicios.UsuarioServicio;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioServicio usuarioServicio;
 
     public ResponseEntity autenticarUsuario(
             @RequestBody @Valid
@@ -37,6 +39,12 @@ public class AuthenticationController {
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
         var JWTToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         return ResponseEntity.ok(new DatosJWTToken(JWTToken));
+    }
+
+    @RequestMapping("/auth/registrar")
+    @Transactional
+    public void registrarUsuario(RegistrarUsuario datos){
+        usuarioServicio.registrarUsuario(datos);
 
     }
 
