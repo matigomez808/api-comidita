@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,29 +22,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
+    private final UsuarioServicio usuarioServicio;
 
-    @Autowired
-    private TokenService tokenService;
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenService tokenService, UsuarioServicio usuarioServicio) {
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        this.usuarioServicio = usuarioServicio;
+    }
 
-    @Autowired
-    private UsuarioServicio usuarioServicio;
-
+    @PostMapping("/login")
     public ResponseEntity autenticarUsuario(
             @RequestBody @Valid
             DatosAutenticarUsuario datosAutenticarUsuario) {
+        System.out.println("creando authToken...");
         Authentication authToken = new UsernamePasswordAuthenticationToken(
-                datosAutenticarUsuario.login(),
-                datosAutenticarUsuario.pass());
+                    datosAutenticarUsuario.login(),
+                    datosAutenticarUsuario.pass());
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
         var JWTToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+        System.out.println(JWTToken);
         return ResponseEntity.ok(new DatosJWTToken(JWTToken));
     }
 
-    @RequestMapping("/auth/registrar")
+    @PostMapping("/registrar")
     @Transactional
-    public void registrarUsuario(RegistrarUsuario datos){
+    public void registrarUsuario(@RequestBody @Valid RegistrarUsuario datos){
+        System.out.println("registrando...");
         usuarioServicio.registrarUsuario(datos);
 
     }

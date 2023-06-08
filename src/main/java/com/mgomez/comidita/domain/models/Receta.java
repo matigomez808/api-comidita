@@ -3,6 +3,7 @@ package com.mgomez.comidita.domain.models;
 import com.mgomez.comidita.domain.records.receta.AddReceta;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.relational.core.mapping.Table;
 
 
 import java.util.List;

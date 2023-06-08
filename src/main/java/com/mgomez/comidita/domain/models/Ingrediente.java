@@ -4,6 +4,7 @@ import com.mgomez.comidita.domain.records.ingrediente.AddIngrediente;
 import com.mgomez.comidita.domain.records.ingrediente.Gondola;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.List;
 

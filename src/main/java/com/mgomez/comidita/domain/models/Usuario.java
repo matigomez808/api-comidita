@@ -1,13 +1,11 @@
 package com.mgomez.comidita.domain.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,17 +13,24 @@ import java.util.List;
 @Table(name="usuarios")
 @Entity(name="usuario")
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String login;
     private String password;
     private String email;
+    private boolean activo;
+
+    public Usuario(String login, String pass, String email) {
+        this.login = login;
+        this.password = pass;
+        this.email = email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -62,10 +67,8 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public Usuario(String login, String pass, String email) {
-        this.login = login;
-        this.password = pass;
-        this.email = email;
+    public Usuario() {
+        this.activo = true;
     }
 
 }

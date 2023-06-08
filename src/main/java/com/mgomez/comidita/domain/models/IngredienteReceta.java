@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mgomez.comidita.domain.records.ingrediente.Unidad;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Table(name = "ingredientes_receta")
 @Entity(name = "ingrediente_receta")

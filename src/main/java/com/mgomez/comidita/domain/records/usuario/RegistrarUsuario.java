@@ -1,4 +1,13 @@
 package com.mgomez.comidita.domain.records.usuario;
 
-public record RegistrarUsuario(String login, String pass, String email) {
+import jakarta.validation.constraints.NotBlank;
+
+public record RegistrarUsuario(
+        @NotBlank
+        String login,
+        @NotBlank
+        String password,
+        @NotBlank
+        String email
+) {
 }
